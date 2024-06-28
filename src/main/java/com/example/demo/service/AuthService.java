@@ -34,7 +34,6 @@ public class AuthService {
         try {
             String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
             userEntity.setPassword(encodedPassword);
-            System.out.println(encodedPassword);
             userRepository.save(userEntity);
             return true;
         } catch(Exception e) {
