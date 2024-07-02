@@ -5,6 +5,7 @@ import com.example.demo.exception.UrlNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.UrlService;
 
@@ -18,6 +19,7 @@ public class UrlController {
     private UrlService urlService;
 
     @PostMapping("/shorten")
+    @PreAuthorize("hasAuthority('User')")
     public ResponseEntity<Url> shortenUrl(@RequestParam("originalUrl") String originalUrl) {
         Url url = urlService.createShortUrl(originalUrl);
         return ResponseEntity.ok(url);

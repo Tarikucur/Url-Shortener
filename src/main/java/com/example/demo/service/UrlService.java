@@ -8,6 +8,7 @@ import com.example.demo.repository.UrlRepository;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,9 +21,9 @@ public class UrlService {
 
     public Url createShortUrl(String originalUrl) {
         String normalizedUrl = normalizeUrl(originalUrl);
-        Url url = urlRepository.findByOriginalUrl(normalizedUrl);
-        if (url != null) {
-            return url;
+        Optional<Url> existingUrl = urlRepository.findByOriginalUrl(normalizedUrl);
+        if (existingUrl.isPresent()) {
+            return existingUrl.get();
         }
 
         String shortUrl = generateUniqueShortUrl();
@@ -35,22 +36,23 @@ public class UrlService {
 
     @Cacheable(value = "urls", key = "#shortUrl", unless = "#result == null")
     public String getOriginalUrl(String shortUrl) {
-        Url url = urlRepository.findByShortUrl(shortUrl);
-        if (url != null) {
-            return url.getOriginalUrl();
-        }
-        return null;
+        Optional<Url> optionalUrl = urlRepository.findByShortUrl(shortUrl);
+        System.out.println(shortUrl);
+        System.out.println(optionalUrl.map(Url::getOriginalUrl));
+        return optionalUrl.map(Url::getOriginalUrl).orElse(null);
     }
 
-    private String generateUniqueShortUrl() {
+    public String generateUniqueShortUrl() {
         String shortUrl;
+        Optional<Url> existingUrl;
         do {
             shortUrl = UUID.randomUUID().toString().substring(0, 6);
-        } while (urlRepository.findByShortUrl(shortUrl) != null);
+            existingUrl = urlRepository.findByShortUrl(shortUrl);
+        } while (existingUrl.isPresent());
         return shortUrl;
     }
 
-    private String normalizeUrl(String url) {
+    public String normalizeUrl(String url) {
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             url = "http://" + url;
         }
