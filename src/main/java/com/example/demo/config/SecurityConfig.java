@@ -40,9 +40,7 @@ public class SecurityConfig  {
                         .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
                 .authorizeHttpRequests(req->req
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("url/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/url/shorten").authenticated()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .sessionManagement(sess->sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

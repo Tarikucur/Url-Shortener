@@ -2,10 +2,10 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Url;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface UrlRepository extends JpaRepository<Url, Long> {
-    Url findByOriginalUrl(String originalUrl);
-    Url findByShortUrl(String shortUrl);
+    Optional<Url> findByOriginalUrl(String originalUrl);
+    Optional<Url> findByShortUrl(String shortUrl);
 }
