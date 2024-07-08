@@ -35,9 +35,10 @@ public class AuthController {
     @PostMapping("/registerUser")
     public ResponseEntity<Void> register(@RequestBody UserRegistrationRequest request) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(request.getEmail());
+        userEntity.setIdentifier(request.getIdentifier());
         userEntity.setPassword(request.getPassword());
         userEntity.setName(request.getName());
+        userEntity.setAccountType(request.getAccountType());
 
         authService.register(userEntity);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -1,16 +1,19 @@
 package com.example.demo.request;
 
+import com.example.demo.enums.AccountType;
+
 public class UserRegistrationRequest {
-    private String email;
+    private String identifier;
     private String password;
     private String name;
+    private AccountType accountType;
 
-    public String getEmail() {
-        return email;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public String getPassword() {
@@ -27,5 +30,13 @@ public class UserRegistrationRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 }

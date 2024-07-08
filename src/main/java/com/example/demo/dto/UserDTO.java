@@ -3,14 +3,14 @@ package com.example.demo.dto;
 public class UserDTO {
     private Long id;
     private String name;
-    private String email;
+    private String identifier;
 
     public UserDTO() {}
 
-    public UserDTO(Long id, String name, String email) {
+    public UserDTO(Long id, String name, String identifier) {
         this.id = id;
         this.name = name;
-        this.email = email;
+        this.identifier = identifier;
     }
 
     public Long getId() {
@@ -29,11 +29,11 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }
