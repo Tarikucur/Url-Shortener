@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.controller.auth.AuthenticationRequestBody;
 import com.example.demo.controller.auth.AuthenticationResponse;
+import com.example.demo.dto.NotificationDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.enums.AccountType;
 import com.example.demo.exception.AuthenticationFailedException;
@@ -19,17 +20,17 @@ public class AuthService {
     private final TokenService tokenService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final NotificationService notificationService;
+    private final KafkaTemplate<String, NotificationDTO> kafkaTemplate;
 
     @Autowired
     public AuthService(TokenService tokenService,
                        UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       NotificationService notificationService) {
+                       KafkaTemplate<String, NotificationDTO> kafkaTemplate) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.notificationService = notificationService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequestBody request) {
@@ -56,8 +57,11 @@ public class AuthService {
         userEntity.setPassword(encodedPassword);
         userRepository.save(userEntity);
 
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setIdentifier(userEntity.getIdentifier());
+        notificationDTO.setAccountType(userEntity.getAccountType());
 
-        notificationService.sendWelcomeNotification(userEntity.getIdentifier(), userEntity.getAccountType());
+        kafkaTemplate.send("userTopic", notificationDTO);
     }
 
     private boolean isIdentifierDuplicate(String identifier, AccountType accountType) {
