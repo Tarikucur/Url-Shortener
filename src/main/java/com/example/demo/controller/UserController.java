@@ -4,7 +4,6 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +44,6 @@ public class UserController {
     }
 
     private UserDTO convertToDto(UserEntity userEntity) {
-        return new UserDTO(userEntity.getId(), userEntity.getName(), userEntity.getEmail());
+        return new UserDTO(userEntity.getId(), userEntity.getName(), userEntity.getIdentifier());
     }
 }

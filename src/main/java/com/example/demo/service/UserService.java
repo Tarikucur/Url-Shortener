@@ -21,10 +21,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException  {
-        Optional<UserEntity> userOptional = repository.findByEmail(username);
-        UserEntity user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+        Optional<UserEntity> userOptional = repository.findByIdentifier(username);
+        UserEntity user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found with: " + username));
         return new User(
-                user.getEmail(),
+                user.getIdentifier(),
                 user.getPassword(),
                 Collections.emptyList()
         );
@@ -33,7 +33,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserById(String id) {
         UserEntity user = repository.findById(id).orElse(null);
         return new User(
-                user.getEmail(),
+                user.getIdentifier(),
                 user.getPassword(),
                 Collections.emptyList()
         );

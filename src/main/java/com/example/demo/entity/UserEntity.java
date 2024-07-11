@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.example.demo.enums.*;
 
 import java.util.*;
 
@@ -17,13 +18,14 @@ public class UserEntity implements UserDetails {
     private String name;
 
     @Column(unique = true)
-    private String email;
+    private String identifier;
 
     private String password;
 
-    public UserEntity() {}
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
-    // Getters and setters
+    public UserEntity() {}
 
     public Long getId() {
         return id;
@@ -39,11 +41,11 @@ public class UserEntity implements UserDetails {
 
     public void setName(String name) { this.name = name; }
 
-    public String getEmail() {
-        return email;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setEmail(String email) { this.email = email; }
+    public void setIdentifier(String identifier) { this.identifier = identifier; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -56,10 +58,18 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return identifier;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 }

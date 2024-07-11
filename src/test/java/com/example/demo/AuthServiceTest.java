@@ -41,40 +41,40 @@ public class AuthServiceTest {
 
     @Test
     void authenticate_withValidCredentials_shouldReturnAuthenticationResponse() {
-        String email = "user@example.com";
+        String identifier = "user@example.com";
         String password = "password";
         String encodedPassword = "$2a$10$mockedEncodedPassword"; // Mocked encoded password
         Long userId = 1L;
 
         AuthenticationRequestBody request = new AuthenticationRequestBody();
-        request.setEmail(email);
+        request.setIdentifier(identifier);
         request.setPassword(password);
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
         userEntity.setName("User");
-        userEntity.setEmail(email);
+        userEntity.setIdentifier(identifier);
         userEntity.setPassword(encodedPassword);
 
-        Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.of(userEntity));
+        Mockito.when(userRepository.findByIdentifier(identifier)).thenReturn(Optional.of(userEntity));
         Mockito.when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
-        Mockito.when(tokenService.generateToken(email)).thenReturn("mockedToken");
+        Mockito.when(tokenService.generateToken(identifier)).thenReturn("mockedToken");
         AuthenticationResponse response = authService.authenticate(request);
         assertThat(response).isNotNull();
         assertThat(response.getToken()).isEqualTo("mockedToken");
         assertThat(response.getName()).isEqualTo("User");
-        assertThat(response.getEmail()).isEqualTo(email);
+        assertThat(response.getIdentifier()).isEqualTo(identifier);
         assertThat(response.getUserId()).isEqualTo(userId);
     }
 
     @Test
     void authenticate_withInvalidCredentials_shouldThrowAuthenticationFailedException() {
-        String email = "user@example.com";
+        String identifier = "user@example.com";
         String password = "wrongpassword";
 
         AuthenticationRequestBody request = new AuthenticationRequestBody();
-        request.setEmail(email);
+        request.setIdentifier(identifier);
         request.setPassword(password);
-        Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findByIdentifier(identifier)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> authService.authenticate(request))
                 .isInstanceOf(AuthenticationFailedException.class)
                 .hasMessageContaining("Authentication failed");

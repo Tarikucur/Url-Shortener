@@ -3,13 +3,13 @@ package com.example.demo.controller.auth;
 public class AuthenticationResponse {
     private String token;
     private String name;
-    private String email;
+    private String identifier;
     private Long userId;
 
-    public AuthenticationResponse(String token, String name, String email, Long userId) {
+    public AuthenticationResponse(String token, String name, String identifier, Long userId) {
         this.token = token;
         this.name = name;
-        this.email = email;
+        this.identifier = identifier;
         this.userId = userId;
     }
 
@@ -29,12 +29,12 @@ public class AuthenticationResponse {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public Long getUserId() {
